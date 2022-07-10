@@ -1,6 +1,6 @@
 # Niner
 
-**Automated trading bot**
+**Automated trading bot.  Learning algorithms are currently being developed.**
 
 ## Installation
 
