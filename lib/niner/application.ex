@@ -10,7 +10,7 @@ defmodule Niner.Application do
     children = [
       # Starts a worker by calling: Niner.Worker.start_link(arg)
       # {Niner.Worker, arg}
-      # {Niner.Streamer, ["ETH-USD"]},
+      # {Niner.Trade_Event_Utils.Trade_Event.Streamer, ["ETH-USD"]},
       Niner.Repo
     ]
 

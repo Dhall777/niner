@@ -28,7 +28,8 @@ defmodule Niner.MixProject do
       {:postgrex, "~> 0.16"},
       {:websockex, "~> 0.4.3"},
       {:poison, "~> 5.0.0"},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:aurum, "~> 0.2.0"}
     ]
   end
 end

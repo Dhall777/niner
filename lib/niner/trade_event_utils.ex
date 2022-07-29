@@ -4,7 +4,7 @@ defmodule Niner.Trade_Event_Utils do
   import Ecto.Query, warn: false
 
   alias Niner.Repo
-  alias Niner.Raw_Data_Utils.Trade_Event
+  alias Niner.Trade_Event_Utils.Trade_Event
 
   # BEGIN API CONFIGURATION
   #

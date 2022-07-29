@@ -1,6 +1,6 @@
 # Schema/Struct and changeset for the incoming API data + its fields (aka: trade_event)
 # Configure validation once pipeline is complete
-defmodule Niner.Raw_Data_Utils.Trade_Event do
+defmodule Niner.Trade_Event_Utils.Trade_Event do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, warn: false
