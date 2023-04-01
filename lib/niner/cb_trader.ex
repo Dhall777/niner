@@ -1,4 +1,4 @@
-defmodule Niner.Coinbase_Trader do
+defmodule Niner.Cb_Trader do
   import Aurum
 
   alias Niner.Repo

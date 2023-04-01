@@ -1,4 +1,4 @@
-defmodule Niner.Trade_Event_Utils.Trade_Event.Streamer do
+defmodule Niner.Trade_Event_Utils.Trade_Event.Cb_Streamer do
   use WebSockex
 
   @url "wss://ws-feed.exchange.coinbase.com"
@@ -36,16 +36,17 @@ defmodule Niner.Trade_Event_Utils.Trade_Event.Streamer do
     handle_msg(Poison.decode!(msg), state)
   end
 
-  defp handle_msg(%{"type" => "match"} = trade, state) do
+  def handle_msg(%{"type" => "match"} = trade, state) do
+    # uncomment for debugging | prints the raw response data from coinbase's API
     # IO.inspect(trade)
-    # Instead of printing output to terminal, stream this Map into Postgres
-    # Use Postgres data to train Python predictive model
-    # Eventually plot from front-end using Ecto queries (like the systemstats app)
-    Niner.Trade_Event_Utils.create_trade_event(trade)
+    # convert raw reponse data into 'clean' map
+    clean_trade = Map.new(for {key, value} <- trade, do: {String.to_atom(key), value})
+    # insert clean trade data in appropriate database table (trade_events)
+    Niner.Trade_Event_Utils.create_trade_event(clean_trade)
     {:ok, state}
   end
 
-  defp handle_msg(_trade, state) do
+  def handle_msg(_trade, state) do
     {:ok, state}
   end
 

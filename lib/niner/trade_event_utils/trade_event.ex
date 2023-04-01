@@ -6,15 +6,15 @@ defmodule Niner.Trade_Event_Utils.Trade_Event do
   import Ecto.Query, warn: false
 
   schema "trade_events" do
-    field(:Maker_Order_Id, :string)
-    field(:Price, :float)
-    field(:Product_Id, :string)
-    field(:Sequence, :integer)
-    field(:Side, :string)
-    field(:Size, :float)
-    field(:Taker_Order_Id, :string)
-    field(:Trade_Id, :integer)
-    field(:Type, :string)
+    field(:maker_order_id, :string)
+    field(:price, :float)
+    field(:product_id, :string)
+    field(:sequence, :integer)
+    field(:side, :string)
+    field(:size, :float)
+    field(:taker_order_id, :string)
+    field(:trade_id, :integer)
+    field(:type, :string)
 
     timestamps()
   end
@@ -22,15 +22,15 @@ defmodule Niner.Trade_Event_Utils.Trade_Event do
   def changeset(trade_event, attrs \\ %{}) do
     trade_event
     |> cast(attrs, [
-      :Maker_Order_Id,
-      :Price,
-      :Product_Id,
-      :Sequence,
-      :Side,
-      :Size,
-      :Taker_Order_Id,
-      :Trade_Id,
-      :Type,
+      :maker_order_id,
+      :price,
+      :product_id,
+      :sequence,
+      :side,
+      :size,
+      :taker_order_id,
+      :trade_id,
+      :type,
     ])
 
     #    |> validate_required([

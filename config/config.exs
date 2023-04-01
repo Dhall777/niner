@@ -2,7 +2,7 @@ import Config
 
 config :niner, Niner.Repo,
   ecto_repos: [Niner.Repo],
-  database: "niner_repo",
+  database: "niner_dev",
   username: "darri",
   password: "r$pJcntR24Qq*54bAlGsQLQ%3uoOVgJk",
   hostname: "localhost",
