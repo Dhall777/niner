@@ -1,6 +1,28 @@
-# Niner
+## Niner 
+> "Go West, young man" - Horace Greeley
 
-**Automated trading bot.  Learning algorithms are currently being developed.**
+- The overall goal is to build a scalable, robust, cryptocurrency trading bot capable of profiting per-trade with transaction costs included.
+
+- Project summary:
+	- train [DRL trading agents](https://en.wikipedia.org/wiki/Reinforcement_learning) on historical and real-time cryptocurrency market data (BTC-USD, ETH-USD, etc.)
+	- DRL agents use the following environment parameters for the assets of interest:
+		- price (done)
+		- market capitalization (in progress)
+		- trading volume (in progress)
+		- network hash rate (in progress)
+		- difficulty (in progress)
+	- train the DRL trading agents using the following algorithms:
+		- [A2C](https://arxiv.org/abs/1602.01783)
+		- [DDPG](https://arxiv.org/abs/1509.02971)
+		- [PPO](https://arxiv.org/abs/1707.06347)
+		- [Ensemble strategy](https://en.wikipedia.org/wiki/Ensemble_learning) in coordination with [Sharpe ratio](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm)
+	- make trade decisions (buy/sell) based on predicted price of the assets,
+	- (goal) gain cumulative return over 12+ months, barring global chaos :)
+
+
+## Disclaimer
+- This is an unfinished side project that I maintain in my free time, don't use it in production environments.
+
 
 ## Installation
 
