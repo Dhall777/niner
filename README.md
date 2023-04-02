@@ -4,7 +4,7 @@
 - The overall goal is to build a scalable, robust, cryptocurrency trading bot capable of profiting per-trade with transaction costs included.
 
 - Project summary:
-	- train [DRL trading agents](https://en.wikipedia.org/wiki/Reinforcement_learning) on historical and real-time cryptocurrency market data (BTC-USD, ETH-USD, etc.)
+	- train [DRL trading agents](https://en.wikipedia.org/wiki/Reinforcement_learning#Deep_reinforcement_learning) on historical and real-time cryptocurrency market data (BTC-USD, ETH-USD, etc.)
 	- DRL agents use the following environment parameters for the assets of interest:
 		- price (done)
 		- market capitalization (in progress)
