@@ -29,7 +29,10 @@ defmodule Niner.MixProject do
       {:websockex, "~> 0.4.3"},
       {:poison, "~> 5.0.0"},
       {:httpoison, "~> 1.8"},
-      {:aurum, "~> 0.2.0"}
+      {:aurum, "~> 0.2.0"},
+      {:jason, "~> 1.4"},
+      {:bumblebee, "~> 0.2.0"},
+      {:exla, ">= 0.0.0"}
     ]
   end
 end

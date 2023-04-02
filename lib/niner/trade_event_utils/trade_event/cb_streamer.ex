@@ -41,8 +41,9 @@ defmodule Niner.Trade_Event_Utils.Trade_Event.Cb_Streamer do
     # IO.inspect(trade)
     # convert raw reponse data into 'clean' map
     clean_trade = Map.new(for {key, value} <- trade, do: {String.to_atom(key), value})
+    IO.inspect(clean_trade)
     # insert clean trade data in appropriate database table (trade_events)
-    Niner.Trade_Event_Utils.create_trade_event(clean_trade)
+    # Niner.Trade_Event_Utils.create_trade_event(clean_trade)
     {:ok, state}
   end
 
