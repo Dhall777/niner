@@ -16,12 +16,14 @@
 		- [DDPG](https://arxiv.org/abs/1509.02971)
 		- [PPO](https://arxiv.org/abs/1707.06347)
 		- [Ensemble strategy](https://en.wikipedia.org/wiki/Ensemble_learning) in coordination with [Sharpe ratio](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm)
-	- make trade decisions (buy/sell) based on predicted price of the assets,
+	- make trade decisions (buy/sell) based on predicted price of the assets
 	- (goal) gain cumulative return over 12+ months, barring global chaos :)
+
 
 
 ## Disclaimer
 - This is an unfinished side project that I maintain in my free time, don't use it in production environments.
+
 
 
 ## Installation
