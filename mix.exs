@@ -32,7 +32,11 @@ defmodule Niner.MixProject do
       {:aurum, "~> 0.2.0"},
       {:jason, "~> 1.4"},
       {:bumblebee, "~> 0.2.0"},
-      {:exla, ">= 0.0.0"}
+      {:axon, "~> 0.5.1"},
+      {:exla, "~> 0.5.2"},
+      {:nx, "~> 0.5.2"},
+      {:table_rex, "~> 3.1.1"},
+      {:csv, "~> 3.0.5"}
     ]
   end
 end

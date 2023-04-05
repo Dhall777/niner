@@ -6,6 +6,9 @@ defmodule Niner.Trade_Event_Utils do
   alias Niner.Repo
   alias Niner.Trade_Event_Utils.Trade_Event
 
+  # topic naming for pubsub (uses the module name)
+  @topic inspect(__MODULE__)
+
   # BEGIN API CONFIGURATION
   #
   # Returns a list of all trade_event records (GET)
