@@ -12,15 +12,15 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
 
   def eth_model do
     # load historical price data from our DB (for now) | get more historical data somewhere else for free + collect my own data using cb_streamer.ex 
-    historical_data_prep = 
-      all_trade_events = from t in Trade_Event, select:
-        %{
-        id: t.id,
-        product_id: t.product_id,
-        price: t.price,
-        order_by: [desc: t.inserted_at]
-        }
-      Repo.all(all_trade_events)    
+    all_trade_events = from t in Trade_Event, select:
+      %{
+      id: t.id,
+      product_id: t.product_id,
+      price: t.price,
+      order_by: [desc: t.inserted_at]
+      }
+
+    historical_data_prep = Repo.all(all_trade_events)    
 
     # clean historical data + create {x, y} tensors + create input stream of eth-usd price data
     historical_data = historical_data_prep |> Enum.map(&[&1.price])
@@ -54,7 +54,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
     # placeholder training model for now
     model_state_eth_usd = model_eth_usd
       |> Axon.Loop.trainer(:mean_squared_error, Axon.Optimizers.adam(0.0777), log: 27)
-      |> Axon.Loop.run(input_data_stream, %{}, epochs: 10)
+      |> Axon.Loop.run(input_data_stream, %{}, epochs: 10, iterations: 500)
 
   end
 
