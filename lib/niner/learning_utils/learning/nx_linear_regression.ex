@@ -6,7 +6,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression do
   # Set of useful machine learning functions.
   # https://github.com/elixir-nx/scholar
   alias Scholar.Preprocessing
-  alias Niner.Learning_Event_Utils.Learning_Event.Eth_Price_Data
+  alias Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent
 
   # This allows us to use numerical definitions.
   import Nx.Defn

@@ -1,4 +1,4 @@
-defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Price_Data do
+defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent do
   @moduledoc """
   Try to predict the likely fuel consumption efficiency
   https://www.kaggle.com/vinicius150987/regression-fuel-consumption
