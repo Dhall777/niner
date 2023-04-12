@@ -36,7 +36,9 @@ defmodule Niner.MixProject do
       {:exla, "~> 0.5.2"},
       {:nx, "~> 0.5.2"},
       {:table_rex, "~> 3.1.1"},
-      {:csv, "~> 3.0.5"}
+      {:csv, "~> 3.0.5"},
+      {:nimble_csv, "~> 1.1"},
+      {:scholar, "~> 0.1"}
     ]
   end
 end
