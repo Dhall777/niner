@@ -2,7 +2,9 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   alias Niner.Trading_Event_Utils
   alias Niner.Trade_Event_Utils.Trade_Event
   alias Niner.Repo
-  # alias Niner.Learning_Utils.Learning
+  # alias Niner.Learning_Utils.Learning.Eth_Async_Adv_Ac
+  alias NimbleCSV.RFC4180, as: CSV
+
   import Ecto.Query
   import Axon
   import Nx
@@ -10,9 +12,10 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   import TableRex
   import NimbleCSV
   import Scholar
+  import Explorer
 
-  def eth_model do
-    # load historical price data from our own DB 
+  def load_data() do
+    # load real-time price data from our database, streamed from the streamer.ex module | eventually use as test data for y_hat predictions
     # all_trade_events = from t in Trade_Event, select:
     #   %{
     #   id: t.id,
@@ -21,59 +24,46 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
     #   order_by: [desc: t.inserted_at]
     #   }
 
-    # historical_data_prep = Repo.all(all_trade_events)    
+    # test_data_prep = Repo.all(all_trade_events)    
 
-    # clean historical data + create {x, y} tensors + create input stream of eth-usd price data
-    # historical_data = historical_data_prep |> Enum.map(&[&1.price]) -> for internal DB queries
+    # clean test data + create {x, y} tensors + create input stream of eth-usd price data
+    # test_data = test_data_prep |> Enum.map(&[&1.price])
 
-    # create headers {x) for eth_usd_tensor | loading historical data as it streams in
-    eth_usd_headers =
-      File.stream!("/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD.csv")
-      |> Enum.at(0)
-      |> String.trim()
-      |> String.split(",")
-    # |> Enum.with_index()
-    # |> Map.new(&(&1))
-
-
-    # create values (y) for eth_usd_tensor | to perform trading calculations as data streams in
-    # eth_usd_values = Learning.trading_algorithms functions(eth_usd_x_tensor)
-    # just a raw_list of values/rows for now, the model isn't learning anything until I implement them in Learning.trading_algorithms module
-    eth_usd_values_raw_a = File.stream!("/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD.csv") |> NimbleCSV.RFC4180.parse_enumerable() |> List.flatten()
-
-    eth_usd_values = Enum.map(eth_usd_values_raw_a, &String.to_float/1)
-
-    # ETH_USD tensor
-    eth_usd_tensor = Nx.tensor(eth_usd_values, names: [:eth_usd, nil])    
-
-    # create data stream for model training | need to create testing and evaluation data at some point
-    input_data_stream =
-      Stream.repeatedly(fn ->
-        xs = eth_usd_headers
-        ys = eth_usd_values
-        {xs, ys}
+    # load ETH-USD historical data from our app's priv directory | creates batch_inputs {x} and batch_labels {y}
+    data =
+      "/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD-a3c.csv"
+      |> File.stream!()
+      |> CSV.parse_stream()
+      |> Stream.map(fn [date, open, high, low, close, adjclose, volume] ->
+        {
+          Integer.parse(date) |> elem(0),
+          Float.parse(close) |> elem(0),
+          Float.parse(open) |> elem(0),
+          Float.parse(high) |> elem(0),
+          Float.parse(low) |> elem(0),
+          Float.parse(close) |> elem(0),
+          Float.parse(adjclose) |> elem(0),
+          Integer.parse(volume) |> elem(0)
+        }
       end)
-
-    # create the nn model input layer + optionally fill out expected tensor shape
-    inp_eth_usd = Axon.input("eth_usd", shape: {nil})
-
-    # create the rest of the nn model (hidden layers + output layer)
-    model_eth_usd = inp_eth_usd
-      |> Axon.dense(128, activation: :relu)
-      |> Axon.batch_norm()
-      |> Axon.dropout(rate: 0.8)
-      |> Axon.dense(64)
-      |> Axon.tanh()
-      |> Axon.dense(10)
-      |> Axon.activation(:softmax)
-
-    # train nn model using various deep reinforcement learning algorithms, then apply ensemble strategy 
-    # dqn = deep q-networks | ppo = proximal policy optimization | ac  = actor-critic | a3c = asynchronous advantage actor-critic, basically sgd+rmsprop | td3 = twin delayed ddpg | ens = ensemble strategy
-    # placeholder training model for now
-    model_state_eth_usd = model_eth_usd
-      |> Axon.Loop.trainer(:mean_squared_error, Axon.Optimizers.adam(0.0777), log: 27)
-      |> Axon.Loop.run(input_data_stream, %{}, epochs: 1000, iterations: 500)
-
   end
 
+  # create Axon model | to be used for the training loop
+  # we're using a sequential model, since it's so simple to implement in Elixir/Axon using the pipe operator
+  def create_model() do
+    # use Axon utils to create sequential model from appropriate data (e.g., ETH-USD)
+    # 
+    Axon.input(data)
+    |> Axon.lstm(50)
+  end
+
+  # train model using supervised training loop
+  def train_model() do
+    # use Axon utils to train model
+  end
+
+  # evaluate model against test data
+  def evaluate_model(model_state) do
+    # use Axon utils to evaluate model
+  end
 end

@@ -1,11 +1,25 @@
 defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent do
-  # Functions to handle CSVfiles
-  # https://github.com/dashbitco/nimble_csv
+  # how to use:
+  # 1. run the project
+  # iex -S mix
+  # 2. load the data
+  # data = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.load_data()
+  # 3. split data into training and test sets (80/20 respectively)
+  # {train, test} = Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression.train_test_split(data, 0.8)
+  # 4. train the model; generates the learned parameters
+  # params = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.train(train)
+  # 4a. calculate MSE (on test data)
+  # mse = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.mse(params, test)
+  # 5. get the test data
+  # {x_test, y_test} = Enum.unzip(test)
+  # 6. predict some prices
+  # y_hat = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.predict(params, x_test)
+
+  # Functions to handle CSVfiles + linear regression module
   alias NimbleCSV.RFC4180, as: CSV
   alias Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression
 
   # Set of useful machine learning functions
-  # https://github.com/elixir-nx/scholar
   alias Scholar.Preprocessing
 
   # Let's define some defaults epochs and learning rate.
@@ -43,7 +57,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent do
   # This is going to load the data as streams.
   @spec load_data :: Stream.t()
   def load_data do
-    "/usr/local/elixir-apps/niner/priv/ETH_USD/FuelEconomy.csv"
+    "/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD-linear-regression.csv"
     |> File.stream!()
     |> CSV.parse_stream()
     |> Stream.map(fn [date, close] ->

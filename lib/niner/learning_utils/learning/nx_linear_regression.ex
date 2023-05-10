@@ -1,15 +1,27 @@
 defmodule Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression do
-  @moduledoc """
-  `NxLinearRegression`.
-  """
+  # how to use:
+  # 1. run the project
+  # iex -S mix
+  # 2. load the data 
+  # data = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.load_data()
+  # 3. split data into training and test sets (80/20 respectively)
+  # {train_set, test_set} = Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression.train_test_split(data, 0.8)
+  # 4. train the model; generates the learned parameters
+  # params = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.train(train)
+  # 4a. calculate MSE (on test data)
+  # mse = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.mse(params, test)
+  # 5. get the test data
+  # {x_test, y_test} = Enum.unzip(test)
+  # 6. predict some prices
+  # y_hat = Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent.predict(params, x_test)
 
-  # Set of useful machine learning functions.
-  # https://github.com/elixir-nx/scholar
+  # Set of useful machine learning functions + parent learning agent
   alias Scholar.Preprocessing
   alias Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent
 
-  # This allows us to use numerical definitions.
+  # This allows us to use numerical definitions and common ML tools
   import Nx.Defn
+  import Scholar
 
   # This is the linear regression function.
   # A linear regression line has an equation of the form Y = wX + b.
@@ -18,7 +30,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression do
   end
 
   # This calculates the mean squared error.
-  # MSE calculates the difference between the predicted fuel economy and the actual economy.
+  # MSE calculates the difference between the predicted ETH-USD price and the actual ETH-USD price.
   defn loss(params, x, y) do
     y_hat = predict(params, x)
 
@@ -49,6 +61,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.NxLinearRegression do
   end
 
   # This is for training based on the number of epochs.
+  # this is now possible by using Scholar.Linear.LinearRegression I think
   @spec train(data :: tuple(), lr :: float(), epochs :: integer()) ::
           {Nx.Tensor.t(), Nx.Tensor.t()}
   def train(data, lr, epochs) do

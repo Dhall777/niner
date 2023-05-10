@@ -38,7 +38,8 @@ defmodule Niner.MixProject do
       {:table_rex, "~> 3.1.1"},
       {:csv, "~> 3.0.5"},
       {:nimble_csv, "~> 1.1"},
-      {:scholar, "~> 0.1"}
+      {:scholar, "~> 0.1"},
+      {:explorer, "~> 0.5.6"}
     ]
   end
 end
