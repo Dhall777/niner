@@ -23,6 +23,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Nx_A3c do
   # the a3c equation function | calculates the a3c loss, which we will use as a 'custom loss function' within Axon
   # L = -log(pi(a_t | s_t; 0)) * A_t + B * MSE(V(s_t; 0_v), R_t)
   # TODO -> find a way to represent the state-action-space (SAS); the learning agents/critics refer to this when performing their policy+value calculations
+  # this loss function will be used during the model training step, where the model refers to this loss function for improve its outputs
   # @spec a3c_loss_function(data :: tuple(), lr :: float(), epochs :: integer()) :: {Nx.Tensor.t(), Nx.Tensor.t()}
   defn a3c_loss_function() do
     # a3c loss function implementation here

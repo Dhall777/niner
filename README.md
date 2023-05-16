@@ -1,28 +1,30 @@
 ## Niner 
 > "Go West, young man" - Horace Greeley
 
-- The overall goal is to build a scalable, robust, cryptocurrency trading bot capable of profiting per-trade with transaction costs included.
+- The overall goal is to build a scalable, robust, cryptocurrency trading bot capable of profiting per-trade (with transaction costs included)
 
-- Project summary:
-	- train [DRL trading agents](https://en.wikipedia.org/wiki/Reinforcement_learning#Deep_reinforcement_learning) on historical and real-time cryptocurrency market data (BTC-USD, ETH-USD, etc.)
-	- DRL agents use the following environment parameters for the assets of interest:
-		- price (done)
-		- market capitalization (in progress)
-		- trading volume (in progress)
-		- network hash rate (in progress)
-		- difficulty (in progress)
-	- train the DRL trading agents using the following algorithms:
-		- [A2C](https://arxiv.org/abs/1602.01783)
-		- [DDPG](https://arxiv.org/abs/1509.02971)
-		- [PPO](https://arxiv.org/abs/1707.06347)
-		- [Ensemble strategy](https://en.wikipedia.org/wiki/Ensemble_learning) in coordination with [Sharpe ratio](https://web.stanford.edu/~wfsharpe/art/sr/sr.htm)
-	- make trade decisions (buy/sell) based on predicted price of the assets
-	- (goal) gain cumulative return over 12+ months, barring global chaos :)
+- Project overview:
+	- train DNN model on historical market data (BTC-USD, ETH-USD, etc.)
+	- features of the historical market data (and thus, the number of input layer units/neurons):
+		- date
+		- open
+		- high
+		- low
+		- close
+		- adjusted close
+		- volume
+	- the model's hidden layers primarily utilize the [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) architecture, which is extremely useful for sequential data processing 
+	- the overall DNN model uses the following loss function(s) to improve prediction accuracy:
+		- [MSE](https://en.wikipedia.org/wiki/Mean_squared_error)
+		- [A3C](https://en.wikipedia.org/wiki/Reinforcement_learning)
+	- predict market prices based on real-time market data input
+	- make various trade decisions (buy/sell/hold) based on the predicted price
+	- goal: make 70% successful trades based on predictions of real-time market prices, barring global chaos :)
 
 
 
 ## Disclaimer
-- This is an unfinished side project that I maintain in my free time, don't use it in production environments.
+- This is an active side project that I maintain in my free time, don't use it in production environments.
 
 
 
