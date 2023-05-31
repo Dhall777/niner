@@ -33,7 +33,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   import Explorer
 
   def load_data() do
-    # load real-time price data from our database, streamed from the streamer.ex module | eventually use as test data for y_hat predictions
+    # 0. load real-time price data from our database, streamed from the streamer.ex module | eventually use as test data for y_hat predictions
     # all_trade_events = from t in Trade_Event, select:
     #   %{
     #   id: t.id,
@@ -47,7 +47,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
     # clean test data + create {x, y} tensors + create input stream of eth-usd price data
     # test_data = test_data_prep |> Enum.map(&[&1.price])
 
-    # load ETH-USD historical data from our app's priv directory | creates batch_inputs {x} and batch_labels {y}
+    # 0. load ETH-USD historical data from our app's priv directory | creates batch_inputs {x} and batch_labels {y}
     # here's a function to test what the actual stream of data looks like in human-readable format:
     # data_human_readable = "/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD-a3c.csv" |> File.stream!() |> CSV.parse_stream() |> Enum.map(fn [date, open, high, low, close, adjclose, volume] -> [Integer.parse(date) |> elem(0), Float.parse(open) |> elem(0), Float.parse(high) |> elem(0), Float.parse(low) |> elem(0), Float.parse(close) |> elem(0), Float.parse(adjclose) |> elem(0), Integer.parse(volume) |> elem(0)] end)
     # to embed the data within an Nx tensor and check the tensor shape:
@@ -71,10 +71,17 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
       end)
   end
 
-  # create Axon model | to be used for the training loop
+  # 1. data preprocessing | normalization the data to ensure all features are on a similar scale, and transform the data into a a sequence of I/O pairs
+  def data_preprocessing(eth_data) do
+    # do some normalization here
+    # transform into sequence of I/O pairs here
+  end
+
+  # 2. create LSTM model | to be used for the training loop
   # we're using a sequential model, since it's pretty simple to implement in Elixir/Axon (thanks pipe operator, such a based function)
   # model summary: utilizing LSTM hidden layers + incremental dropout
   # i don't think Axon has modules supporting graph NNs or multi-headed attention mechanisms, but keep an eye out for that
+  # def create_model_lstm(eth_processed_data) do
   def create_model_lstm(eth_data) do
     # if overfitting still occurs despite the dropout layers, consider regularizing the input data before the input layer (normalizing, etc.)
     eth_model =
@@ -115,15 +122,20 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
       |> Axon.dense(1980, activation: :softmax)
   end
 
-  # train model using supervised training loop
-  # we are using Axon's built in loss function for now, but we will eventually replace it with our custom A3C loss function (nx_a3c.ex)
+  # 3. train LSTM model using supervised training loop
   def train_model_lstm(eth_model) do
-    # 
-    Axon.Loop.trainer(eth_model, :mean_squared_error, Axon.Optimizers.adamw(0.001))
+    # we are using Axon's built in MSE loss function for now, but we will eventually replace it with our custom A3C loss function (nx_a3c.ex)
+    Axon.Loop.trainer(eth_model, :mean_squared_error, Axon.Optimizers.adamw(0.005))
   end
 
-  # evaluate model against test data
+  # 4. evaluate trained LSTM model against test data
   def evaluate_model(eth_model_state) do
     # use Axon utils to evaluate model
   end
+
+  # 5. predict prices using our trained model
+  def predict_prices(x_test) do
+    # calculate y_hat given x-test
+  end
+
 end
