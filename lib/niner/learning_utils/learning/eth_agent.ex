@@ -2,7 +2,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   # how to use:
   # 0. run the project
   # iex -S mix
-  # 1. load the data
+  # 1. load the ETH-USD data
   # eth_data = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.load_data()
   # 2. create the model
   # eth_model = Eth_Agent.create_model()
@@ -25,27 +25,6 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
 
   # 0. load raw ETH-USD historical data from our app's priv directory | creates batch_inputs {x} and batch_labels {y}
   def load_data() do
-    # load real-time price data from our database, streamed from the streamer.ex module | eventually use as test data for y_hat predictions
-    # live_trade_events = from t in Trade_Event, select:
-    #   %{
-    #   id: t.id,
-    #   product_id: t.product_id,
-    #   price: t.price,
-    #   order_by: [desc: t.inserted_at]
-    #   }
-
-    # test_data_prep = Repo.all(live_trade_events)    
-
-    # clean test data + create {x, y} tensors + create input stream of eth-usd price data
-    # test_data = test_data_prep |> Enum.map(&[&1.price])
-    #
-    # here are some functions to test what the actual stream of data looks like in human-readable format:
-    # data_human_readable = "/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD-a3c.csv" |> File.stream!() |> CSV.parse_stream() |> Enum.map(fn [date, open, high, low, close, adjclose, volume] -> [Integer.parse(date) |> elem(0), Float.parse(open) |> elem(0), Float.parse(high) |> elem(0), Float.parse(low) |> elem(0), Float.parse(close) |> elem(0), Float.parse(adjclose) |> elem(0), Integer.parse(volume) |> elem(0)] end)
-    # to embed the data within an Nx tensor and check the tensor shape:
-    # tensor_data = "/usr/local/elixir-apps/niner/priv/ETH_USD/ETH-USD-a3c.csv" |> File.stream!() |> CSV.parse_stream() |> Enum.map(fn [date, open, high, low, close, adjclose, volume] -> [Integer.parse(date) |> elem(0), Float.parse(open) |> elem(0), Float.parse(high) |> elem(0), Float.parse(low) |> elem(0), Float.parse(close) |> elem(0), Float.parse(adjclose) |> elem(0), Integer.parse(volume) |> elem(0)] end)
-    # eth_usd_tensor = Nx.tensor(tensor_data)
-    # eth_usd_tensor_shape = Nx.shape(eth_usd_tensor)
-    #
     # sequence_length = 365
     # sequence_length = 180
     # sequence_length = 90
@@ -84,15 +63,13 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   # we're using a sequential model, since it's pretty simple to implement in Elixir/Axon (thanks pipe operator, based)
   # model summary: utilizing LSTM hidden layers + incremental dropout + dense layers
   def create_model() do
-    # if overfitting still occurs despite the dropout layers, consider regularizing the input data before the input layer (normalizing, etc.)
-    #
     sequence_length = 30
     sequence_features = 2
     batch_size = 14
 
     eth_model =
-      # the input layer | the input data shape may vary, so consider changing the 1st shape value '1980' to 'nil'
-      # Axon.input("eth_usd", shape: {128, 31, 7})
+      # the input layer | the input data shape may vary, so consider changing the 1st shape value to 'nil'
+      # Axon.input("eth_usd", shape: {52, 30, 2})
       Axon.input("eth_usd", shape: {nil, sequence_length, sequence_features})
       # the 1st LSTM layer | gradually increasing the # of neurons/units with each LSTM layer helps our model develop a hierarchical representation of the data
       |> Axon.lstm(52, name: "one", activation: :linear)
@@ -119,8 +96,8 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   def train_model(eth_model) do
     batch_size = 14
 
+    # split the data into training and testing sets -> includes minimal normalization
     eth_data = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.load_data()
-    # split the data into training and testing sets + minimal normalization
     {x_train_prep, y_train_prep} = Niner.Learning_Event_Utils.Learning_Event.Nx_A3c.split_train_test(eth_data, 0.8)
     x_train_tensor = Nx.tensor(x_train_prep) |> Nx.divide(4000)
     y_train_tensor = Nx.tensor(y_train_prep) |> Nx.divide(4000)
