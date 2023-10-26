@@ -1,25 +1,21 @@
 ## Niner 
 > "Go West, young man" - Horace Greeley
 
-- The overall goal is to build a scalable, robust, cryptocurrency trading bot capable of profiting per-trade (with transaction costs included)
+- The overall goal is to build a scalable and fault-tolerant cryptocurrency trading bot capable of predicting crypto market prices with 95% accuracy
 
 - Project overview:
-	- train DNN model on historical market data (BTC-USD, ETH-USD, etc.)
-	- features of the historical market data (and thus, the number of input layer units/neurons):
+	- train DNN model on historical cryptocurrency market data (BTC-USD, ETH-USD, etc.)
+	- features of the historical market data:
 		- date
-		- open
-		- high
-		- low
-		- close
-		- adjusted close
-		- volume
-	- the model's hidden layers primarily utilize the [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) architecture, which is extremely useful for sequential data processing 
+		- close (i.e., closing price of crypto product of choice)
+	- the model's hidden layers primarily utilize the [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) architecture
 	- the overall DNN model uses the following loss function(s) to improve prediction accuracy:
 		- [MSE](https://en.wikipedia.org/wiki/Mean_squared_error)
-		- [A3C](https://en.wikipedia.org/wiki/Reinforcement_learning)
-	- predict market prices based on real-time market data input
-	- make various trade decisions (buy/sell/hold) based on the predicted price
-	- goal: make 70% successful trades based on predictions of real-time market prices, barring global chaos :)
+		- [A3C](https://en.wikipedia.org/wiki/Reinforcement_learning) -> custom loss function not implemented yet
+	- predict crypto prices given market data input (aka: closing crypto prices from the previous day)
+		- market data input is given to the model (a) manually or (b) from our DB of real-time market data
+	- make various trade decisions (buy/sell/hold) based on the accuracy of our predicted price
+	- goal: make 95% successful trade predictions, barring global chaos :)
 
 
 

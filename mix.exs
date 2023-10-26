@@ -31,15 +31,19 @@ defmodule Niner.MixProject do
       {:httpoison, "~> 1.8"},
       {:aurum, "~> 0.2.0"},
       {:jason, "~> 1.4"},
-      {:bumblebee, "~> 0.2.0"},
-      {:axon, "~> 0.5.1"},
-      {:exla, "~> 0.5.2"},
-      {:nx, "~> 0.5.2"},
-      {:table_rex, "~> 3.1.1"},
+      # {:bumblebee, "~> 0.2.0"},
+      # {:axon, "~> 0.5.1"},
+      {:axon, "~> 0.6.0"},
+      # {:exla, "~> 0.5.2"},
+      {:exla, "~> 0.6.0"},
+      # {:nx, "~> 0.5.2"},
+      {:nx, "~> 0.6.0"},
+      # {:table_rex, "~> 3.1.1"},
       {:csv, "~> 3.0.5"},
-      {:nimble_csv, "~> 1.1"},
-      {:scholar, "~> 0.1"},
-      {:explorer, "~> 0.5.6"}
+      {:nimble_csv, "~> 1.1"}
+      # {:scholar, "~> 0.1"}
+      # {:explorer, "~> 0.5.6"}
+      # {:explorer, "~> 0.6.1"}
     ]
   end
 end
