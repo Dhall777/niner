@@ -1,25 +1,15 @@
 defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   # how to use:
-  # 1. run the project
+  # 0. run the project
   # iex -S mix
-  # 2. load the data
+  # 1. load the data
   # eth_data = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.load_data()
-  # 3. split data into a training and testing/validation set (80/20 split, respectively)
-  # {x_train_prep, y_train_prep} = Niner.Learning_Event_Utils.Learning_Event.Nx_A3c.split_train_test(eth_data, 0.8)
-  # x_train_tensor = Nx.tensor(x_train_prep)
-  # y_train_tensor = Nx.tensor(y_train_prep)
-  # batch_size = 128
-  # x_train = Nx.to_batched(x_train_tensor, batch_size)
-  # y_train = Nx.to_batched(y_train_tensor, batch_size)
-  # now you can put the x_train and y_train variables in the Axon.Loop.run function and properly train the model :)
-  # 4. create and train the DNN model | example LSTM model in the create_model function below
-  # eth_model = 
-  # 5. calculate model MSE (not required, but useful)
-  # mse = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.mse(eth_params, test)
-  # 6. load the "unseen" test data to validate the model is learning instead of memorizing the training data (i.e., should be live data pulled from our DB eventually)
-  # {x_test, y_test} = 
-  # 7. predict some prices
-  # y_hat = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.predict(eth_params, x_test)
+  # 2. create the model
+  # eth_model = Eth_Agent.create_model()
+  # 3. train the model
+  # eth_model_training_params = Eth_Agent.train_model(eth_model)
+  # 4. predict prices
+  # eth_predictions = Eth_Agent.predict_prices(eth_model, eth_model_training_params)
 
   alias Niner.Trading_Event_Utils
   alias Niner.Trade_Event_Utils.Trade_Event
@@ -96,16 +86,9 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   def create_model() do
     # if overfitting still occurs despite the dropout layers, consider regularizing the input data before the input layer (normalizing, etc.)
     #
-    # sequence_length = 365
-    # sequence_length = 180
-    # sequence_length = 90
     sequence_length = 30
-    # sequence_length = 1
-    # sequence_features = 7
     sequence_features = 2
-    # batch_size = 128
     batch_size = 14
-    # batch_size = 16
 
     eth_model =
       # the input layer | the input data shape may vary, so consider changing the 1st shape value '1980' to 'nil'
