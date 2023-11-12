@@ -25,5 +25,5 @@ niner-*.tar
 # Temporary files for e.g. tests
 /tmp
 
-# ignore config directory
-/config/
+# ignore config files
+/config
