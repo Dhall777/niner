@@ -1,4 +1,4 @@
-# your config file would look something like this
+# your config.exs file would look something like this
 import Config
 
 config :project, Project.Repo,
