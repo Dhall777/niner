@@ -15,7 +15,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
   alias Niner.Trade_Event_Utils.Trade_Event
   alias Niner.Learning_Event_Utils.Learning_Event.Eth_Agent
   alias Niner.Repo
-  alias Niner.Learning_Utils.Learning.Nx_a3c
+  alias Niner.Learning_Utils.Learning.Data_Utils
   alias NimbleCSV.RFC4180, as: CSV
 
   import Ecto.Query
@@ -101,7 +101,7 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
 
     # split the data into training and testing sets -> includes minimal normalization
     eth_data = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.load_data()
-    {x_train_prep, y_test_prep} = Niner.Learning_Event_Utils.Learning_Event.Nx_A3c.split_train_test(eth_data, 0.8)
+    {x_train_prep, y_test_prep} = Niner.Learning_Event_Utils.Learning_Event.Data_Utils.split_train_test(eth_data, 0.8)
     x_train_tensor = Nx.tensor(x_train_prep) |> Nx.divide(4000)
     y_test_tensor = Nx.tensor(y_test_prep) |> Nx.divide(4000)
     x_train = Nx.to_batched(x_train_tensor, batch_size)

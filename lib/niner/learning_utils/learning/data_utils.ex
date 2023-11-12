@@ -1,4 +1,4 @@
-defmodule Niner.Learning_Event_Utils.Learning_Event.Nx_A3c do
+defmodule Niner.Learning_Event_Utils.Learning_Event.Data_Utils do
   # alias parent learning agent and numerical definitions
   alias alias Niner.Learning_Event_Utils.Learning_Event.Eth_Test_Agent
   alias Nx.Defn
