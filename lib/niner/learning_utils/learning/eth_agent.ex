@@ -72,22 +72,27 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
       # Axon.input("eth_usd", shape: {52, 30, 2})
       Axon.input("eth_usd", shape: {nil, sequence_length, sequence_features})
       # the 1st LSTM layer | gradually increasing the # of neurons/units with each LSTM layer helps our model develop a hierarchical representation of the data
-      |> Axon.lstm(104, name: "one", activation: :sigmoid, gate: :sigmoid)
+      |> Axon.lstm(206, name: "one", activation: :sigmoid, gate: :sigmoid)
       # get the output of the LSTM layer | this is fed into the dropout layer
       |> then(fn {output, _} -> output end)
       # 1st dropout layer | helps with overfitting, don't become too dependent on a single neuron/unit! | 2% dropout rate
       # https://jmlr.org/papers/v15/srivastava14a.html
       |> Axon.dropout(rate: 0.2)
       # 2nd LSTM layer
-      |> Axon.lstm(52, name: "two", activation: :sigmoid, gate: :sigmoid)
-      # get the output of the LSTM layer | feed into the dropout layer
+      |> Axon.lstm(104, name: "two", activation: :sigmoid, gate: :sigmoid)
       |> then(fn {output, _} -> output end)
       # 2nd droput layer
       |> Axon.dropout(rate: 0.2)
       # 3rd LSTM layer
-      |> Axon.lstm(26, name: "three", activation: :sigmoid, gate: :sigmoid)
-      # get the output of the LSTM layer | feed into the dropout layer
+      |> Axon.lstm(52, name: "three", activation: :sigmoid, gate: :sigmoid)
       |> then(fn {output, _} -> output end)
+      # 3rd droput layer
+      |> Axon.dropout(rate: 0.2)
+      # 4th LSTM layer
+      |> Axon.lstm(26, name: "four", activation: :sigmoid, gate: :sigmoid)
+      |> then(fn {output, _} -> output end)
+      # 4th droput layer
+      |> Axon.dropout(rate: 0.2)
       # the output layer
       # we want to use the date feature/column as the input prompt to return the predicted price data 
       # |> Axon.dense(13, activation: :sigmoid)
@@ -101,12 +106,12 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
 
     # split the data into training and testing sets -> includes minimal normalization
     eth_data = Niner.Learning_Event_Utils.Learning_Event.Eth_Agent.load_data()
-    {x_train_prep, y_test_prep} = Niner.Learning_Event_Utils.Learning_Event.Data_Utils.split_train_test(eth_data, 0.8)
+    {x_train_prep, y_train_prep} = Niner.Learning_Event_Utils.Learning_Event.Data_Utils.split_train_test(eth_data, 0.8)
     x_train_tensor = Nx.tensor(x_train_prep) |> Nx.divide(4000)
-    y_test_tensor = Nx.tensor(y_test_prep) |> Nx.divide(4000)
+    y_train_tensor = Nx.tensor(y_train_prep) |> Nx.divide(4000)
     x_train = Nx.to_batched(x_train_tensor, batch_size)
-    y_test = Nx.to_batched(y_test_tensor, batch_size)
-    eth_data_final = Stream.zip(x_train, y_test)
+    y_train = Nx.to_batched(y_train_tensor, batch_size)
+    eth_data_final = Stream.zip(x_train, y_train)
 
     eth_model_training_params =
       # train LSTM model using supervised training loop
@@ -123,6 +128,11 @@ defmodule Niner.Learning_Event_Utils.Learning_Event.Eth_Agent do
     x_test = [[1980, 2012.63]] |> Enum.chunk_every(1, 1, :discard) |> Nx.tensor() |> Nx.reshape({:auto, 1, 2})
     y_hat = Axon.predict(eth_model, eth_model_training_params, x_test, compiler: EXLA)
             |> Nx.multiply(4000)
+  end
+
+  # 4. evaluate the model's performance
+  def evaluate_model(eth_model_training_params)
+    Axon.Loop.evaluator(eth_model_training_params)
   end
 
 end
